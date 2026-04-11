@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>daniblooming — Mapa de Negocio & Roadmap</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,700;1,400;1,700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream:   #F9E8D8;
+    --orange:  #E97C41;
+    --pink:    #E18C8F;
+    --ac-rose: #E2B8BC;
+    --ac-blue: #B9C8FF;
+    --ac-gold: #B8AA2D;
+    --ink:     #2d1a0e;
+    --grad-main:  linear-gradient(135deg, #E97C41 0%, #E18C8F 100%);
+    --grad-soft:  linear-gradient(160deg, #F9E8D8 0%, #E2B8BC 100%);
+    --grad-bg:    linear-gradient(160deg, #F9E8D8 0%, #fdf3ea 50%, #f5e0cc 100%);
+    --grad-gold:  linear-gradient(135deg, #B8AA2D 0%, #E97C41 100%);
+    --font-display: 'Alegreya', serif;
+    --font-body:    'Poppins', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--grad-bg);
+    min-height: 100vh;
+    color: var(--ink);
+    padding: 0 0 80px;
+    overflow-x: hidden;
+    position: relative;
+  }
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(70px);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .blob-1 { width: 380px; height: 380px; background: #E97C41; opacity: 0.18; top: -120px; left: -100px; }
+  .blob-2 { width: 280px; height: 280px; background: #E18C8F; opacity: 0.18; top: 0;     right: -80px; }
+  .blob-3 { width: 220px; height: 220px; background: #B9C8FF; opacity: 0.13; bottom: 20%; left: 20%; }
+  .blob-4 { width: 180px; height: 180px; background: #B8AA2D; opacity: 0.10; bottom: 5%;  right: 10%; }
+
+  .top-strip { height: 4px; background: linear-gradient(90deg, #B9C8FF, #E97C41, #E18C8F, #B8AA2D, #E2B8BC); }
+
+  header {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 52px 24px 36px;
+  }
+
+  .logomark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    background: var(--grad-main);
+    margin-bottom: 16px;
+    box-shadow: 0 10px 36px rgba(233,124,65,0.38);
+    animation: pop 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes rise { from { transform: translateY(18px); opacity: 0; } to { transform: none; opacity: 1; } }
+
+  header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(34px, 6vw, 54px);
+    font-weight: 700;
+    line-height: 1.05;
+    animation: rise 0.7s 0.15s ease both;
+  }
+  .h1-dani     { display: block; color: #E18C8F; font-style: italic; }
+  .h1-blooming {
+    display: block;
+    background: var(--grad-main);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  header .sub {
+    font-size: 11px; font-weight: 300; letter-spacing: 0.1em;
+    text-transform: uppercase; color: rgba(45,26,14,0.45);
+    margin-top: 10px;
+    animation: rise 0.7s 0.3s ease both;
+  }
+  .divider {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin: 6px auto 0; opacity: 0.35;
+  }
+  .divider span { height: 1px; width: 70px; background: linear-gradient(90deg, transparent, #E97C41); }
+  .divider span:last-child { background: linear-gradient(90deg, #E97C41, transparent); }
+
+  .container { max-width: 820px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+
+  .tab-row {
+    display: flex; gap: 6px; margin-bottom: 24px;
+    flex-wrap: wrap; justify-content: center;
+    animation: rise 0.7s 0.45s ease both;
+  }
+  .tab {
+    font-family: var(--font-body); font-size: 11.5px; font-weight: 500;
+    letter-spacing: 0.04em; padding: 8px 18px; border-radius: 99px;
+    cursor: pointer; border: 1.5px solid rgba(233,124,65,0.28);
+    color: rgba(45,26,14,0.6); background: rgba(249,232,216,0.75);
+    backdrop-filter: blur(8px); transition: all 0.2s ease;
+  }
+  .tab:hover { border-color: var(--orange); color: var(--orange); }
+  .tab.active {
+    background: var(--grad-main); color: white;
+    border-color: transparent; box-shadow: 0 4px 18px rgba(233,124,65,0.35);
+  }
+  .panel { display: none; }
+  .panel.active { display: block; animation: rise 0.3s ease both; }
+
+  .section-label {
+    font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: rgba(45,26,14,0.38); margin-bottom: 14px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.55);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(233,124,65,0.13);
+    border-radius: 20px; padding: 18px 20px; margin-bottom: 10px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(233,124,65,0.13); }
+
+  .card-o { background: linear-gradient(135deg, rgba(233,124,65,0.11) 0%, rgba(249,232,216,0.75) 100%); border-color: rgba(233,124,65,0.22); }
+  .card-p { background: linear-gradient(135deg, rgba(225,140,143,0.09) 0%, rgba(249,232,216,0.75) 100%); border-color: rgba(225,140,143,0.22); }
+  .card-b { background: linear-gradient(135deg, rgba(185,200,255,0.14) 0%, rgba(249,232,216,0.75) 100%); border-color: rgba(185,200,255,0.28); }
+  .card-g { background: linear-gradient(135deg, rgba(184,170,45,0.09) 0%, rgba(249,232,216,0.75) 100%); border-color: rgba(184,170,45,0.22); }
+
+  .card-title {
+    font-family: var(--font-display); font-size: 16px; font-weight: 700;
+    color: var(--ink); margin-bottom: 5px;
+  }
+  .card-sub { font-size: 13px; color: rgba(45,26,14,0.62); line-height: 1.6; font-weight: 300; }
+
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  @media (max-width: 580px) { .g2, .g3 { grid-template-columns: 1fr; } }
+
+  .badge {
+    display: inline-block; font-size: 10.5px; font-weight: 500;
+    padding: 3px 10px; border-radius: 99px;
+    margin-right: 4px; margin-top: 8px; letter-spacing: 0.02em;
+  }
+  .bo { background: var(--grad-main); color: white; }
+  .bp { background: linear-gradient(135deg, #E18C8F, #E2B8BC); color: white; }
+  .bb { background: linear-gradient(135deg, #B9C8FF, #9ab0f0); color: #2d3a6e; }
+  .bg { background: var(--grad-gold); color: white; }
+  .bs { background: rgba(233,124,65,0.13); color: var(--orange); border: 1px solid rgba(233,124,65,0.2); }
+
+  .phase-card {
+    background: rgba(255,255,255,0.55); backdrop-filter: blur(14px);
+    border: 1px solid rgba(233,124,65,0.13); border-left-width: 4px;
+    border-radius: 0 20px 20px 0; padding: 18px 20px; margin-bottom: 10px;
+    transition: transform 0.18s ease;
+  }
+  .phase-card:hover { transform: translateX(3px); }
+  .phase-num { font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(45,26,14,0.38); margin-bottom: 2px; }
+  .phase-title { font-family: var(--font-display); font-size: 18px; font-style: italic; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .phase-dur { font-size: 11px; color: rgba(45,26,14,0.4); margin-bottom: 12px; font-weight: 300; }
+
+  .task { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: rgba(45,26,14,0.75); margin-bottom: 7px; font-weight: 300; line-height: 1.5; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
+
+  .f-card {
+    background: rgba(255,255,255,0.55); backdrop-filter: blur(14px);
+    border: 1px solid rgba(233,124,65,0.13); border-left-width: 4px;
+    border-radius: 0 20px 20px 0; padding: 16px 18px; margin-bottom: 6px;
+  }
+  .f-arrow { text-align: center; font-size: 22px; color: rgba(233,124,65,0.35); margin: 2px 0; }
+
+  .arrow-row {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    margin: 6px 0; font-size: 11px; color: rgba(45,26,14,0.35);
+    font-weight: 300; letter-spacing: 0.04em;
+  }
+  .al { flex: 1; height: 1px; background: linear-gradient(90deg, transparent, rgba(233,124,65,0.22), transparent); max-width: 100px; }
+
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
+  .kpi { border-radius: 14px; padding: 12px 14px; border: 1px solid rgba(255,255,255,0.4); }
+  .kpi-val {
+    font-family: var(--font-display); font-size: 22px; font-weight: 700; line-height: 1;
+    background: var(--grad-main); -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .kpi-lbl { font-size: 11px; color: rgba(45,26,14,0.5); margin-top: 4px; font-weight: 300; line-height: 1.4; }
+  .ko { background: linear-gradient(135deg, rgba(233,124,65,0.12), rgba(249,232,216,0.5)); }
+  .kp { background: linear-gradient(135deg, rgba(225,140,143,0.10), rgba(249,232,216,0.5)); }
+  .kb { background: linear-gradient(135deg, rgba(185,200,255,0.15), rgba(249,232,216,0.5)); }
+  .kg { background: linear-gradient(135deg, rgba(184,170,45,0.10), rgba(249,232,216,0.5)); }
+
+  footer {
+    text-align: center; margin-top: 52px;
+    font-size: 12px; color: rgba(45,26,14,0.35); font-weight: 300;
+    position: relative; z-index: 1;
+  }
+  footer em { font-style: italic; font-family: var(--font-display); color: var(--orange); font-size: 14px; }
+</style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+<div class="blob blob-4"></div>
+
+<div class="top-strip"></div>
+
+<header>
+  <div style="animation: pop 0.6s cubic-bezier(0.34,1.56,0.64,1) both; margin-bottom: 10px;">
+    <img src="logo1.png" alt="daniblooming logo" style="max-width: 120px; width: 35%;">
+  </div>
+  <div style="animation: rise 0.7s 0.2s ease both; margin-bottom: 4px;">
+    <img src="logo2.png" alt="daniblooming isologo" style="height: 120px; width: auto;">
+  </div>
+  <p class="sub">Mapa del ecosistema · Roadmap de pauta · Funnel · KPIs</p>
+</header>
+
+<div class="container">
+
+  <div class="tab-row">
+    <button class="tab active" onclick="showTab('mapa',this)">Mapa del negocio</button>
+    <button class="tab" onclick="showTab('roadmap',this)">Roadmap de pauta</button>
+    <button class="tab" onclick="showTab('funnel',this)">Funnel de ventas</button>
+    <button class="tab" onclick="showTab('kpis',this)">KPIs clave</button>
+  </div>
+
+  <!-- MAPA -->
+  <div id="tab-mapa" class="panel active">
+    <p class="section-label">Ecosistema completo del negocio</p>
+    <div class="card card-o">
+      <p class="card-title">🧠 La marca — daniblooming</p>
+      <p class="card-sub">Psicóloga con enfoque en bienestar, autoconocimiento y journaling terapéutico. La marca tiene posicionamiento aspiracional: acompañar el proceso de florecimiento personal.</p>
+      <span class="badge bo">Psicología</span><span class="badge bp">Journaling</span><span class="badge bg">Bienestar</span>
+    </div>
+    <div class="arrow-row"><div class="al"></div><span>alimenta</span><div class="al"></div></div>
+    <div class="g2">
+      <div class="card card-p">
+        <p class="card-title">📱 Redes sociales</p>
+        <p class="card-sub">Contenido orgánico de valor: tips de journaling, psicología aplicada, reflexiones. Canal de top-of-funnel.</p>
+        <span class="badge bp">Orgánico</span>
+      </div>
+      <div class="card card-b">
+        <p class="card-title">🌐 Sitio web</p>
+        <p class="card-sub">Hub central: blog, página de servicios, tienda de productos digitales, landing pages para pauta.</p>
+        <span class="badge bb">Por construir</span>
+      </div>
+    </div>
+    <div class="arrow-row" style="margin-top:6px"><div class="al"></div><span>convierte en</span><div class="al"></div></div>
+    <div class="g3">
+      <div class="card card-g">
+        <p class="card-title">📓 Journal físico</p>
+        <p class="card-sub">Producto estrella. Guía estructurada de journaling para el proceso de florecimiento.</p>
+        <span class="badge bg">Lanzamiento</span>
+      </div>
+      <div class="card card-o">
+        <p class="card-title">💻 Productos digitales</p>
+        <p class="card-sub">PDFs, guías, worksheets, prompts. Bajo costo, alto margen, alta escalabilidad.</p>
+        <span class="badge bo">Escalable</span>
+      </div>
+      <div class="card card-p">
+        <p class="card-title">🎓 Servicios</p>
+        <p class="card-sub">Consultas, acompañamiento psicológico, talleres grupales. Ticket alto, capacidad limitada.</p>
+        <span class="badge bp">Ticket alto</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROADMAP -->
+  <div id="tab-roadmap" class="panel">
+    <p class="section-label">Plan de pauta — 4 fases</p>
+    <div class="phase-card" style="border-left-color:#B9C8FF">
+      <p class="phase-num">Fase 1</p>
+      <p class="phase-title">Construcción de audiencia y awareness</p>
+      <p class="phase-dur">Semanas 1–4 · Antes del lanzamiento del journal</p>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B9C8FF,#9ab0f0)"></span><span>Auditoría de perfiles y definición de buyer persona de dani</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B9C8FF,#9ab0f0)"></span><span>Campaña de tráfico frío a contenido de valor (reels, carruseles) en Meta Ads</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B9C8FF,#9ab0f0)"></span><span>Pixel instalado en el sitio web para construir audiencias desde el inicio</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B9C8FF,#9ab0f0)"></span><span>Lead magnet gratuito: PDF de prompts de journaling como gancho</span></div>
+      <span class="badge bb">Meta Ads</span><span class="badge bs">Orgánico</span>
+    </div>
+    <div class="phase-card" style="border-left-color:#E18C8F">
+      <p class="phase-num">Fase 2</p>
+      <p class="phase-title">Generación de leads y venta de digitales</p>
+      <p class="phase-dur">Semanas 5–8 · Primera monetización</p>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E18C8F,#E2B8BC)"></span><span>Campaña de conversión hacia producto digital de bajo ticket (worksheet / guía $10–30 USD)</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E18C8F,#E2B8BC)"></span><span>Retargeting a visitas del sitio web y viewers de videos</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E18C8F,#E2B8BC)"></span><span>Email marketing básico: secuencia de bienvenida post-descarga del lead magnet</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E18C8F,#E2B8BC)"></span><span>Test de creativos: testimonios, USP del journal, transformación antes/después</span></div>
+      <span class="badge bp">Conversiones</span><span class="badge bg">Email</span>
+    </div>
+    <div class="phase-card" style="border-left-color:#B8AA2D">
+      <p class="phase-num">Fase 3</p>
+      <p class="phase-title">Pre-lanzamiento del journal</p>
+      <p class="phase-dur">Semanas 9–12 · Generación de expectativa</p>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B8AA2D,#E97C41)"></span><span>Campaña de expectativa: "algo se viene" con contenido detrás de cámaras</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B8AA2D,#E97C41)"></span><span>Lista de espera o preventa con descuento early-bird</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B8AA2D,#E97C41)"></span><span>UGC y testimonios de beta testers / personas cercanas que usaron el journal</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#B8AA2D,#E97C41)"></span><span>Campaña de tráfico a landing page de preventa</span></div>
+      <span class="badge bg">Pre-lanzamiento</span><span class="badge bo">UGC</span>
+    </div>
+    <div class="phase-card" style="border-left-color:#E97C41">
+      <p class="phase-num">Fase 4</p>
+      <p class="phase-title">Lanzamiento y escala</p>
+      <p class="phase-dur">Semana 13+ · Revenue activo</p>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E97C41,#E18C8F)"></span><span>Campaña de lanzamiento oficial con oferta de tiempo limitado</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E97C41,#E18C8F)"></span><span>Retargeting agresivo a toda la audiencia caliente acumulada en fases anteriores</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E97C41,#E18C8F)"></span><span>Bundle: journal físico + producto digital como upgrade de valor</span></div>
+      <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E97C41,#E18C8F)"></span><span>Lookalike audiences basadas en compradores para escalar inversión</span></div>
+      <span class="badge bo">Lanzamiento</span><span class="badge bp">Escala</span>
+    </div>
+  </div>
+
+  <!-- FUNNEL -->
+  <div id="tab-funnel" class="panel">
+    <p class="section-label">Funnel de ventas — de extraño a comprador</p>
+    <div class="f-card" style="border-left-color:#B9C8FF">
+      <p class="card-title">🔍 TOFU — Awareness</p>
+      <p class="card-sub">Audiencia fría que no conoce a dani. Objetivo: alcance e interés.</p>
+      <div style="margin-top:10px">
+        <div class="task"><span class="dot" style="background:#B9C8FF"></span><span>Reels y contenido orgánico de valor</span></div>
+        <div class="task"><span class="dot" style="background:#B9C8FF"></span><span>Ads de tráfico a artículos del blog o videos</span></div>
+        <div class="task"><span class="dot" style="background:#B9C8FF"></span><span>Colaboraciones y menciones con cuentas del nicho</span></div>
+      </div>
+    </div>
+    <div class="f-arrow">↓</div>
+    <div class="f-card" style="border-left-color:#E2B8BC">
+      <p class="card-title">💡 MOFU — Consideración</p>
+      <p class="card-sub">Ya nos conocen. Objetivo: construir confianza y capturar datos.</p>
+      <div style="margin-top:10px">
+        <div class="task"><span class="dot" style="background:#E2B8BC"></span><span>Lead magnet: guía gratuita de journaling a cambio de email</span></div>
+        <div class="task"><span class="dot" style="background:#E2B8BC"></span><span>Retargeting a viewers y visitantes del sitio</span></div>
+        <div class="task"><span class="dot" style="background:#E2B8BC"></span><span>Contenido educativo: por qué el journaling transforma</span></div>
+      </div>
+    </div>
+    <div class="f-arrow">↓</div>
+    <div class="f-card" style="border-left-color:#B8AA2D">
+      <p class="card-title">🛒 BOFU — Conversión</p>
+      <p class="card-sub">Audiencia caliente. Objetivo: compra.</p>
+      <div style="margin-top:10px">
+        <div class="task"><span class="dot" style="background:#B8AA2D"></span><span>Oferta de producto digital de entrada (bajo ticket)</span></div>
+        <div class="task"><span class="dot" style="background:#B8AA2D"></span><span>Secuencia de email post lead magnet con CTA</span></div>
+        <div class="task"><span class="dot" style="background:#B8AA2D"></span><span>Ads de conversión con testimonios y transformación</span></div>
+      </div>
+    </div>
+    <div class="f-arrow">↓</div>
+    <div class="f-card" style="border-left-color:#E97C41">
+      <p class="card-title">🔁 Retención y upsell</p>
+      <p class="card-sub">Ya compraron. Objetivo: fidelizar y aumentar LTV.</p>
+      <div style="margin-top:10px">
+        <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E97C41,#E18C8F)"></span><span>Upsell al journal físico desde producto digital</span></div>
+        <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E97C41,#E18C8F)"></span><span>Comunidad o membresía (futuro)</span></div>
+        <div class="task"><span class="dot" style="background:linear-gradient(135deg,#E97C41,#E18C8F)"></span><span>Consultas o acompañamiento para clientes activos</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div id="tab-kpis" class="panel">
+    <p class="section-label">KPIs para medir éxito por fase</p>
+    <div class="card card-o" style="margin-bottom:10px">
+      <p class="card-title">Fase 1 · Awareness</p>
+      <div class="kpi-grid">
+        <div class="kpi ko"><p class="kpi-val">+30%</p><p class="kpi-lbl">Crecimiento de seguidores/mes</p></div>
+        <div class="kpi kb"><p class="kpi-val">&lt;$0.10</p><p class="kpi-lbl">CPM o costo por ThruPlay</p></div>
+        <div class="kpi kp"><p class="kpi-val">&gt;3%</p><p class="kpi-lbl">CTR de los ads de tráfico</p></div>
+        <div class="kpi kg"><p class="kpi-val">Pixel ✓</p><p class="kpi-lbl">Instalado y disparando eventos</p></div>
+      </div>
+    </div>
+    <div class="card card-p" style="margin-bottom:10px">
+      <p class="card-title">Fase 2 · Leads y digitales</p>
+      <div class="kpi-grid">
+        <div class="kpi ko"><p class="kpi-val">&lt;$2</p><p class="kpi-lbl">Costo por lead (CPL)</p></div>
+        <div class="kpi kp"><p class="kpi-val">&gt;30%</p><p class="kpi-lbl">Tasa apertura email</p></div>
+        <div class="kpi kb"><p class="kpi-val">&gt;1.5%</p><p class="kpi-lbl">Tasa conversión tienda</p></div>
+        <div class="kpi kg"><p class="kpi-val">ROAS 2x</p><p class="kpi-lbl">En ads de conversión</p></div>
+      </div>
+    </div>
+    <div class="card card-g">
+      <p class="card-title">Fases 3–4 · Lanzamiento journal</p>
+      <div class="kpi-grid">
+        <div class="kpi ko"><p class="kpi-val">500+</p><p class="kpi-lbl">Leads antes del lanzamiento</p></div>
+        <div class="kpi kp"><p class="kpi-val">ROAS 3x</p><p class="kpi-lbl">Meta campaña de lanzamiento</p></div>
+        <div class="kpi kb"><p class="kpi-val">&gt;5%</p><p class="kpi-lbl">Conversión landing preventa</p></div>
+        <div class="kpi kg"><p class="kpi-val">CAC &lt;30%</p><p class="kpi-lbl">Del precio del journal</p></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p>daniblooming · estrategia de negocio & pauta · <em>by Pauli</em></p>
+</footer>
+
+<script>
+function showTab(id, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
